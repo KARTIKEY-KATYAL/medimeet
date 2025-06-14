@@ -13,6 +13,7 @@ import { checkUser } from "@/lib/checkUser";
 import { Badge } from "./ui/badge";
 import { checkAndAllocateCredits } from "@/actions/credits";
 import Image from "next/image";
+import { ThemeToggle } from "./theme-toggle";
 
 export default async function Header() {
   const user = await checkUser();
@@ -33,16 +34,11 @@ export default async function Header() {
           />
         </Link>
 
-        {/* Action Buttons */}
         <div className="flex items-center space-x-2">
           <SignedIn>
-            {/* Admin Links */}
             {user?.role === "ADMIN" && (
               <Link href="/admin">
-                <Button
-                  variant="outline"
-                  className="hidden md:inline-flex items-center gap-2"
-                >
+                <Button variant="outline" className="hidden md:inline-flex items-center gap-2">
                   <ShieldCheck className="h-4 w-4" />
                   Admin Dashboard
                 </Button>
@@ -52,13 +48,9 @@ export default async function Header() {
               </Link>
             )}
 
-            {/* Doctor Links */}
             {user?.role === "DOCTOR" && (
               <Link href="/doctor">
-                <Button
-                  variant="outline"
-                  className="hidden md:inline-flex items-center gap-2"
-                >
+                <Button variant="outline" className="hidden md:inline-flex items-center gap-2">
                   <Stethoscope className="h-4 w-4" />
                   Doctor Dashboard
                 </Button>
@@ -68,13 +60,9 @@ export default async function Header() {
               </Link>
             )}
 
-            {/* Patient Links */}
             {user?.role === "PATIENT" && (
               <Link href="/appointments">
-                <Button
-                  variant="outline"
-                  className="hidden md:inline-flex items-center gap-2"
-                >
+                <Button variant="outline" className="hidden md:inline-flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
                   My Appointments
                 </Button>
@@ -84,13 +72,9 @@ export default async function Header() {
               </Link>
             )}
 
-            {/* Unassigned Role */}
             {user?.role === "UNASSIGNED" && (
               <Link href="/onboarding">
-                <Button
-                  variant="outline"
-                  className="hidden md:inline-flex items-center gap-2"
-                >
+                <Button variant="outline" className="hidden md:inline-flex items-center gap-2">
                   <User className="h-4 w-4" />
                   Complete Profile
                 </Button>
@@ -103,19 +87,14 @@ export default async function Header() {
 
           {(!user || user?.role !== "ADMIN") && (
             <Link href={user?.role === "PATIENT" ? "/pricing" : "/doctor"}>
-              <Badge
-                variant="outline"
-                className="h-9 bg-emerald-900/20 border-emerald-700/30 px-3 py-1 flex items-center gap-2"
-              >
+              <Badge variant="outline" className="h-9 bg-emerald-900/20 border-emerald-700/30 px-3 py-1 flex items-center gap-2">
                 <CreditCard className="h-3.5 w-3.5 text-emerald-400" />
                 <span className="text-emerald-400">
                   {user && user.role !== "ADMIN" ? (
                     <>
                       {user.credits}{" "}
                       <span className="hidden md:inline">
-                        {user?.role === "PATIENT"
-                          ? "Credits"
-                          : "Earned Credits"}
+                        {user?.role === "PATIENT" ? "Credits" : "Earned Credits"}
                       </span>
                     </>
                   ) : (
@@ -125,6 +104,8 @@ export default async function Header() {
               </Badge>
             </Link>
           )}
+
+          <ThemeToggle />
 
           <SignedOut>
             <SignInButton>
